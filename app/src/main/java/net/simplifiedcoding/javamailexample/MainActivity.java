@@ -2,15 +2,25 @@ package net.simplifiedcoding.javamailexample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.Random;
 
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Send button
     private Button buttonSend;
+
+    Random r = new Random();
+    int randNum = r.nextInt(5000 - 2000) + 2000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void sendEmail() {
         //Getting content for email
 
-        Random r = new Random();
-        int randNum = r.nextInt(5000 - 2000) + 2000;
-
 
         String email = editTextEmail.getText().toString().trim();
 //        String subject = editTextSubject.getText().toString().trim();
@@ -62,6 +73,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        insertRandomNumber();
         sendEmail();
+    }
+
+
+    private void insertRandomNumber() {
+        RandomNumAPI service = ServiceGenerator.createService(RandomNumAPI.class);
+        Call<ResponseBody> signU =  service.insertRandomNumber(
+                "ajeet",
+                randNum
+
+        );
+
+
+        signU.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                //On success we will read the server's output using bufferedreader
+                //Creating a bufferedreader object
+                BufferedReader reader = null;
+
+                //An string to store output from the server
+                String output = "";
+
+                try {
+                    //Initializing buffered reader
+                    reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
+                    //Reading the output in the string
+                    output = reader.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //Displaying the output as a toast
+//                        Toast.makeText(SignUpActivity.this, output, Toast.LENGTH_LONG).show();
+                Log.d("Check", output);
+
+                if (output.equals("random number inserted")) {
+
+                    Toast.makeText(getApplicationContext(),output,Toast.LENGTH_LONG).show();
+
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),output,Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //If any error occured displaying the error as toast
+                Toast.makeText(getApplicationContext(), t.toString(), LENGTH_LONG).show();
+            }
+        });
     }
 }

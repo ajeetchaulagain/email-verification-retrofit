@@ -8,13 +8,10 @@ import retrofit2.http.POST;
 
 public interface RandomNumAPI {
     @FormUrlEncoded
-    @POST("/yokitab/random.php")
-    Call<ResponseBody> insertUser(
-            @Field("randcode") String randomCode,
-            @Field("email") String email,
-            @Field("level") String level,
-            @Field("faculty") String faculty,
-            @Field("year") String year,
-            @Field("password") String password
+    @POST("/register/register.php")
+    Call<ResponseBody> insertRandomNumber(
+            @Field("username") String username,
+            @Field("randcode") int randomCode
     );
 }
+
