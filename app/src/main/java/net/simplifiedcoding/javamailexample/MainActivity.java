@@ -14,8 +14,6 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.Random;
 
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonSend;
 
     Random r = new Random();
-    int randNum = r.nextInt(5000 - 2000) + 2000;
+    int randNum = r.nextInt(50000 - 20000) + 20000;
 
 
     @Override
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        String message = editTextMessage.getText().toString().trim();
 
         String subject="Edu-Kit: Confirmation Link";
-        String message="http://localhost/register/register.php?username=ajeet&rand="+randNum;
+        String message="http://localhost/register/reg.php?username=ajeet&rand="+randNum;
 
         //Creating SendMail object
         SendMail sm = new SendMail(this, email, subject, message);
@@ -113,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (output.equals("random number inserted")) {
 
                     Toast.makeText(getApplicationContext(),output,Toast.LENGTH_LONG).show();
-
                 }
                 else{
                     Toast.makeText(getApplicationContext(),output,Toast.LENGTH_LONG).show();

@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-    public static final String BASE_URl = "http://192.168.10.7";
+    public static final String BASE_URl = "http://192.168.10.8";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
